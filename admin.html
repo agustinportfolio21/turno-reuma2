@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Reumatología</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-layout">
+        <header class="top-navbar">
+            <div class="nav-brand">
+                <div class="logo-icon-small">R</div>
+                <span>Reumatología - Admin</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" onclick="showSection('dashboard', this)" class="active"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></a>
+                <a href="#" onclick="showSection('turnos', this)"><i class="fa-solid fa-list-check"></i> <span>Turnos</span></a>
+                <a href="#" onclick="showSection('pacientes', this)"><i class="fa-solid fa-users"></i> <span>Pacientes</span></a>
+                <a href="#" onclick="showSection('auditoria', this)"><i class="fa-solid fa-clipboard-list"></i> <span>Auditoría</span></a>
+            </nav>
+            <div class="user-profile-menu" id="user-profile-menu">
+                <button class="user-profile-btn" onclick="toggleProfileMenu()">
+                    <div class="user-avatar" id="user-avatar-initial">A</div>
+                    <div class="user-info-header">
+                        <span class="user-name-header" id="user-name-header">Admin</span>
+                        <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+                    </div>
+                </button>
+                <div class="profile-dropdown hidden" id="profile-dropdown">
+                    <a href="#" onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar Sesión</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section id="section-dashboard">
+                <div class="page-header">
+                    <h1>Dashboard</h1>
+                    <p>Resumen general del sistema de turnos.</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e3f2fd; color: #1976d2;"><i class="fa-solid fa-calendar-check"></i></div>
+                        <div class="stat-info"><h3 id="stat-total-turnos">0</h3><p>Turnos Totales</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fff3cd; color: #856404;"><i class="fa-solid fa-clock"></i></div>
+                        <div class="stat-info"><h3 id="stat-pendientes">0</h3><p>Pendientes</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #d4edda; color: #155724;"><i class="fa-solid fa-circle-check"></i></div>
+                        <div class="stat-info"><h3 id="stat-confirmados">0</h3><p>Confirmados</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #f8d7da; color: #721c24;"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-info"><h3 id="stat-pacientes">0</h3><p>Pacientes Registrados</p></div>
+                    </div>
+                </div>
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <h3><i class="fa-solid fa-clock-rotate-left"></i> Últimas Solicitudes</h3>
+                        <a href="#" onclick="showSection('turnos', document.querySelectorAll('.nav-links a')[1])" class="panel-link">Ver todas <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="table-container" style="margin-top: 0; border: none;">
+                        <table>
+                            <thead><tr><th>Paciente</th><th>Servicio</th><th>Fecha Turno</th><th>Estado</th></tr></thead>
+                            <tbody id="tabla-ultimas-solicitudes"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section-turnos" class="hidden">
+                <div class="page-header">
+                    <h1>Gestión de Turnos</h1>
+                    <p>Administración, confirmación y cancelación de turnos.</p>
+                </div>
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="filtro-busqueda" placeholder="Buscar por paciente, doctor o email..." oninput="renderAdminTurnos()">
+                    </div>
+                    <div class="filter-group">
+                        <select id="filtro-estado" onchange="renderAdminTurnos()">
+                            <option value="Todos">Todos los estados</option>
+                            <option value="Pendiente">Pendientes</option>
+                            <option value="Confirmado">Confirmados</option>
+                            <option value="Cancelado">Cancelados</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select id="filtro-doctor" onchange="renderAdminTurnos()">
+                            <option value="Todos">Todos los doctores</option>
+                            <option value="Dra. María González">Dra. María González</option>
+                            <option value="Dr. Carlos Rodríguez">Dr. Carlos Rodríguez</option>
+                            <option value="Dra. Ana Martínez">Dra. Ana Martínez</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paciente</th><th>Edad</th><th>Contacto</th><th>Servicio</th>
+                                <th>Doctor</th><th>Fecha/Hora</th><th>Estado</th><th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-admin-turnos"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="section-pacientes" class="hidden">
+                <div class="page-header">
+                    <h1>Base de Pacientes</h1>
+                    <p>Control de usuarios registrados en el sistema.</p>
+                </div>
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="filtro-paciente" placeholder="Buscar paciente por nombre o email..." oninput="renderAdminPacientes()">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th><th>Edad</th><th>Teléfono</th><th>Email</th>
+                                <th>Registro</th><th>Turnos</th><th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-admin-pacientes"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="section-auditoria" class="hidden">
+                <div class="page-header">
+                    <h1>Registro de Auditoría</h1>
+                    <p>Historial de todas las acciones realizadas en el sistema.</p>
+                </div>
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="filtro-auditoria" placeholder="Buscar por usuario, acción o entidad..." oninput="renderAuditoria()">
+                    </div>
+                    <div class="filter-group">
+                        <select id="filtro-auditoria-accion" onchange="renderAuditoria()">
+                            <option value="Todas">Todas las acciones</option>
+                            <option value="CREAR">Crear</option>
+                            <option value="ACTUALIZAR">Actualizar</option>
+                            <option value="CANCELAR">Cancelar</option>
+                            <option value="ELIMINAR">Eliminar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Fecha</th><th>Usuario</th><th>Acción</th><th>Entidad</th><th>Detalle</th></tr>
+                        </thead>
+                        <tbody id="tabla-auditoria"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modal-turno" class="modal hidden">
+        <div class="modal-content" style="max-width: 600px;">
+            <h3><i class="fa-solid fa-calendar-check" style="color: var(--primary-blue); margin-right: 8px;"></i> Gestionar Turno</h3>
+            <p id="modal-paciente-name" style="color: var(--text-light); margin-bottom: 20px; font-size: 14px;"></p>
+            <input type="hidden" id="modal-turno-id">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="input-group">
+                    <label style="font-size: 12px; color: var(--text-light); display: block; margin-bottom: 5px;">Nueva Fecha</label>
+                    <input type="date" id="modal-nueva-fecha" style="padding-left: 15px;">
+                </div>
+                <div class="input-group">
+                    <label style="font-size: 12px; color: var(--text-light); display: block; margin-bottom: 5px;">Nueva Hora</label>
+                    <input type="time" id="modal-nueva-hora" style="padding-left: 15px;">
+                </div>
+            </div>
+            <div class="input-group">
+                <label style="font-size: 12px; color: var(--text-light); display: block; margin-bottom: 5px;">Mensaje personalizado (opcional)</label>
+                <textarea id="modal-mensaje" rows="2" placeholder="Ej: Por favor traer estudios previos..."></textarea>
+            </div>
+            <div style="background: var(--bg-color); border-radius: 10px; padding: 20px; margin-top: 15px;">
+                <h4 style="font-size: 14px; margin-bottom: 12px; color: var(--primary-blue);"><i class="fa-brands fa-whatsapp"></i> Previsualización del mensaje automático</h4>
+                <div id="preview-mensaje" style="background: #dcf8c6; padding: 15px; border-radius: 10px; font-size: 13px; line-height: 1.6; color: #303030; white-space: pre-line; max-height: 200px; overflow-y: auto;"></div>
+                <p style="font-size: 11px; color: var(--text-light); margin-top: 8px;"><i class="fa-solid fa-info-circle"></i> Este mensaje se enviará automáticamente al paciente al confirmar el turno.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn-primary" onclick="saveTurnoAdmin()" style="background: var(--success);"><i class="fa-solid fa-paper-plane"></i> Confirmar y Enviar Mensaje</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL COMPROBANTE (Admin) -->
+    <div id="modal-comprobante" class="modal hidden">
+        <div class="modal-content" style="max-width: 850px; padding: 0; background: transparent;">
+            <div id="seccion-imprimible" class="comprobante-container">
+                <!-- Contenido generado por JS -->
+            </div>
+            <div class="comprobante-acciones">
+                <button class="btn-comprobante secondary" onclick="closeComprobante()"><i class="fa-solid fa-xmark"></i> Cerrar</button>
+                <button class="btn-comprobante primary" onclick="imprimirComprobante()"><i class="fa-solid fa-print"></i> Imprimir</button>
+                <button class="btn-comprobante primary" onclick="descargarComprobante()"><i class="fa-solid fa-download"></i> Descargar PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
