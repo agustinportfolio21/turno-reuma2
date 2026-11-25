@@ -13,11 +13,14 @@
             <div class="logo-icon-small">R</div>
             <span>Reumatología</span>
         </div>
-        <nav class="landing-nav-links">
-            <a href="#inicio">Inicio</a>
-            <a href="#servicios">Servicios</a>
-            <a href="#doctores">Especialistas</a>
-            <a href="#contacto">Contacto</a>
+        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menú">
+            <i class="fa-solid fa-bars" id="mobile-menu-icon"></i>
+        </button>
+        <nav class="landing-nav-links" id="landing-nav-links">
+            <a href="#inicio" onclick="closeMobileMenu()">Inicio</a>
+            <a href="#servicios" onclick="closeMobileMenu()">Servicios</a>
+            <a href="#doctores" onclick="closeMobileMenu()">Especialistas</a>
+            <a href="#contacto" onclick="closeMobileMenu()">Contacto</a>
         </nav>
         <div class="landing-nav-actions">
             <a href="login.html?mode=login" class="btn-nav-outline">Iniciar Sesión</a>

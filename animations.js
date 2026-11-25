@@ -95,3 +95,35 @@ window.scrollToSection = function(targetId) {
         });
     }
 };
+
+// ================= MENÚ MÓVIL =================
+window.toggleMobileMenu = function() {
+    const menu = document.getElementById('landing-nav-links');
+    const icon = document.getElementById('mobile-menu-icon');
+    if (!menu) return;
+    menu.classList.toggle('mobile-open');
+    if (icon) {
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-xmark');
+    }
+};
+
+window.closeMobileMenu = function() {
+    const menu = document.getElementById('landing-nav-links');
+    const icon = document.getElementById('mobile-menu-icon');
+    if (menu) menu.classList.remove('mobile-open');
+    if (icon) {
+        icon.classList.add('fa-bars');
+        icon.classList.remove('fa-xmark');
+    }
+};
+
+// Cerrar menú al hacer clic fuera
+document.addEventListener('click', (e) => {
+    const menu = document.getElementById('landing-nav-links');
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    if (menu && menu.classList.contains('mobile-open') && 
+        !menu.contains(e.target) && !toggle.contains(e.target)) {
+        window.closeMobileMenu();
+    }
+});

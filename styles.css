@@ -1033,3 +1033,340 @@ main > section {
 .modal-step-dot.completed {
     background: var(--success);
 }
+
+/* ================= RESPONSIVE GENERAL ================= */
+@media (max-width: 1024px) {
+    .main-content { padding: 30px 20px; }
+    .landing-section { padding: 60px 25px; }
+    .landing-hero h1 { font-size: 42px; }
+    .landing-navbar { padding: 15px 25px; }
+    .landing-nav-links { gap: 18px; }
+    .comprobante-container { padding: 30px; }
+    .comprobante-grid { gap: 20px; }
+}
+
+@media (max-width: 768px) {
+    /* ===== NAVBAR ===== */
+    .landing-navbar,
+    .top-navbar {
+        padding: 12px 15px;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 60px;
+        gap: 10px;
+    }
+    .landing-nav-links { display: none; }
+    .landing-nav-actions { gap: 8px; }
+    .landing-nav-actions .btn-nav-outline,
+    .landing-nav-actions .btn-nav-primary {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+    .nav-brand { font-size: 15px; }
+    .nav-brand .logo-icon-small { width: 28px; height: 28px; font-size: 14px; }
+
+    /* Navbar del portal: menú horizontal scrollable */
+    .nav-links {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 4px;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-links a {
+        white-space: nowrap;
+        padding: 8px 12px;
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+    .nav-links a span { display: inline; }
+    .user-profile-menu { margin-left: auto; }
+    .user-name-header { display: none; }
+    .user-profile-btn { padding: 6px 10px; }
+
+    /* ===== HERO ===== */
+    .landing-hero {
+        min-height: 500px;
+        padding: 60px 20px;
+        text-align: center;
+    }
+    .landing-hero h1 { font-size: 32px; line-height: 1.15; }
+    .landing-hero p { font-size: 15px; }
+    .hero-badge { font-size: 11px; padding: 6px 14px; }
+    .hero-actions { flex-direction: column; align-items: stretch; gap: 10px; }
+    .btn-hero-primary,
+    .btn-hero-secondary {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    .hero-stats { gap: 25px; margin-top: 40px; }
+    .hero-stat h3 { font-size: 24px; }
+    .hero-stat p { font-size: 11px; }
+    .scroll-indicator { bottom: 15px; font-size: 20px; }
+
+    /* ===== SECCIONES LANDING ===== */
+    .landing-section,
+    .landing-section-alt { padding: 50px 20px; }
+    .section-header { margin-bottom: 35px; }
+    .section-header h2 { font-size: 26px; }
+    .section-header p { font-size: 14px; }
+    .services-grid,
+    .doctors-grid-landing,
+    .steps-grid-landing,
+    .contact-grid-landing {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    .service-item { padding: 25px 20px; }
+    .doctor-landing-card img { width: 110px; height: 110px; }
+    .step-number { width: 55px; height: 55px; font-size: 22px; }
+    .landing-cta { padding: 50px 20px; }
+    .landing-cta h2 { font-size: 26px; }
+    .landing-cta p { font-size: 15px; }
+    .map-landing { height: 280px; }
+
+    /* ===== LOGIN ===== */
+    .login-body-new { flex-direction: column; }
+    .login-side-panel { display: none; }
+    .login-form-panel { padding: 20px 15px; min-height: 100vh; align-items: flex-start; padding-top: 40px; }
+    .login-form-box { padding: 30px 22px; max-width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+    .login-form-box .auth-form h2 { font-size: 22px; }
+    .login-form-box .auth-tabs button { font-size: 14px; padding: 10px; }
+    .form-options { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+    /* ===== PORTAL PACIENTE / ADMIN ===== */
+    .main-content { padding: 25px 15px; }
+    .page-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .page-header h1 { font-size: 22px; }
+    .page-header p { font-size: 13px; }
+    .hero-full { height: auto; min-height: 380px; padding: 40px 20px; }
+    .hero-full h1 { font-size: 32px; }
+    .hero-full p { font-size: 15px; }
+    .steps-section { padding: 40px 15px; }
+    .steps-title { font-size: 24px; margin-bottom: 30px; }
+    .steps-grid-large { grid-template-columns: 1fr; gap: 18px; }
+    .step-card-large { padding: 30px 20px; }
+    .step-icon-large { width: 65px; height: 65px; font-size: 26px; }
+    .step-card-large h3 { font-size: 19px; }
+    .step-card-large p { font-size: 14px; }
+    .info-home-section { grid-template-columns: 1fr; gap: 18px; margin-bottom: 40px; }
+    .info-card { padding: 25px 20px; }
+    .info-card h3 { font-size: 20px; }
+
+    /* ===== WIZARD RESERVA ===== */
+    .wizard-container { padding: 25px 18px; border-radius: 12px; }
+    .wizard-header { flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 30px; }
+    .wizard-header::before { display: none; }
+    .wizard-step { padding: 0 8px; }
+    .wizard-step .circle { width: 34px; height: 34px; font-size: 13px; }
+    .wizard-step span { font-size: 10px; }
+    .wizard-body { min-height: auto; }
+    .wizard-pane h3 { font-size: 18px !important; }
+    .service-grid { grid-template-columns: 1fr; gap: 12px; }
+    .service-card { padding: 20px 15px; }
+    .service-card i { font-size: 24px; }
+    .doctors-grid { grid-template-columns: 1fr; gap: 15px; }
+    .doctor-card { padding: 20px 15px; }
+    .doctor-img { width: 90px; height: 90px; }
+    .shifts-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .shift-card { padding: 15px 10px; }
+    .shift-date { font-size: 14px; }
+    .shift-time { font-size: 13px; }
+    .confirm-summary { padding: 18px; }
+    .wizard-actions { flex-direction: column; gap: 10px; }
+    .wizard-actions button { width: 100% !important; }
+
+    /* ===== TABLAS ===== */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 10px;
+    }
+    table { min-width: 700px; }
+    th, td { padding: 10px 12px; font-size: 12px; }
+    th { font-size: 10px; }
+    .btn-action { padding: 5px 8px; font-size: 11px; }
+    .status-badge { font-size: 10px; padding: 4px 8px; }
+
+    /* ===== FILTROS ===== */
+    .filters-bar { flex-direction: column; gap: 10px; }
+    .filter-group { min-width: 100%; }
+    .filter-group input,
+    .filter-group select { padding: 10px 12px 10px 38px; font-size: 13px; }
+
+    /* ===== DASHBOARD ===== */
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stat-card { padding: 18px; gap: 12px; flex-direction: column; text-align: center; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-info h3 { font-size: 22px; }
+    .stat-info p { font-size: 11px; }
+    .panel-header { padding: 15px; flex-direction: column; align-items: flex-start; gap: 8px; }
+
+    /* ===== MODALES ===== */
+    .modal { padding: 10px; align-items: flex-end; }
+    .modal-content {
+        width: 100%;
+        max-width: 100% !important;
+        padding: 22px 18px;
+        border-radius: 16px 16px 0 0;
+        max-height: 92vh;
+        overflow-y: auto;
+        animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalSlideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+    .modal-content h3 { font-size: 18px; }
+    .modal-actions { flex-direction: column-reverse; gap: 8px; }
+    .modal-actions button { width: 100%; }
+    #preview-mensaje { font-size: 12px; max-height: 150px; }
+
+    /* ===== COMPROBANTE ===== */
+    .comprobante-container { padding: 20px 15px; margin: 10px; border-radius: 10px; }
+    .comprobante-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+    .comprobante-clinica { gap: 10px; }
+    .comprobante-logo { width: 45px; height: 45px; font-size: 20px; }
+    .comprobante-clinica h3 { font-size: 16px; }
+    .comprobante-clinica p { font-size: 10px; }
+    .comprobante-titulo { text-align: left; }
+    .comprobante-titulo h2 { font-size: 18px; }
+    .comprobante-titulo .codigo { font-size: 11px; }
+    .comprobante-grid { grid-template-columns: 1fr; gap: 18px; }
+    .comprobante-seccion h4 { font-size: 11px; }
+    .comprobante-seccion p { font-size: 13px; }
+    .comprobante-indicaciones { padding: 15px; }
+    .comprobante-indicaciones h4 { font-size: 13px; }
+    .comprobante-indicaciones ul li { font-size: 12px; }
+    .comprobante-footer { flex-direction: column; gap: 20px; text-align: center; }
+    .comprobante-firma .linea { width: 160px; }
+    .comprobante-acciones { flex-direction: column; gap: 8px; padding: 0 10px 20px 10px; }
+    .btn-comprobante { width: 100%; justify-content: center; padding: 12px; font-size: 13px; }
+    .comprobante-preview { font-size: 11px; padding: 10px; }
+
+    /* ===== CONTACTO ===== */
+    .contact-section { padding: 0 15px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 18px; }
+    .contact-card { padding: 22px 18px; }
+    .contact-card h3 { font-size: 18px; }
+    .contact-item { gap: 12px; }
+    .contact-item i { width: 36px; height: 36px; font-size: 16px; }
+    .map-container { height: 220px; }
+
+    /* ===== FOOTER ===== */
+    .footer { padding: 35px 20px 15px 20px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 25px; padding-bottom: 25px; text-align: center; }
+    .footer-brand .brand-row { justify-content: center; }
+    .footer-col h4 { margin-bottom: 12px; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-bottom { font-size: 11px; }
+
+    /* ===== RECUPERACIÓN CONTRASEÑA ===== */
+    #modal-recuperacion .modal-content { padding: 22px 18px; }
+    #recuperar-codigo { font-size: 18px; letter-spacing: 6px; }
+}
+
+@media (max-width: 480px) {
+    .landing-hero h1 { font-size: 26px; }
+    .landing-hero p { font-size: 14px; }
+    .section-header h2 { font-size: 22px; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .shifts-grid { grid-template-columns: 1fr; }
+    .hero-stats { flex-direction: column; gap: 15px; }
+    .login-form-box { padding: 25px 18px; }
+    .login-form-box .auth-form h2 { font-size: 20px; }
+    .login-form-box .input-group input { padding: 12px 12px 12px 40px; font-size: 14px; }
+    .user-avatar { width: 26px; height: 26px; font-size: 12px; }
+    .btn-nav-outline, .btn-nav-primary { padding: 7px 12px; font-size: 11px; }
+    .nav-brand span { font-size: 13px; }
+    .main-content { padding: 20px 12px; }
+    .page-header h1 { font-size: 20px; }
+    .comprobante-container { padding: 15px 12px; }
+    .comprobante-clinica h3 { font-size: 14px; }
+    .comprobante-titulo h2 { font-size: 16px; }
+    .wizard-container { padding: 20px 14px; }
+    .step-card-large { padding: 25px 15px; }
+    .stat-card { padding: 15px; }
+    .stat-info h3 { font-size: 20px; }
+}
+
+/* ================= TOUCH OPTIMIZATIONS ================= */
+@media (hover: none) and (pointer: coarse) {
+    /* Botones más grandes en pantallas táctiles */
+    .btn-action, .btn-comprobante, .btn-primary, .btn-outline, .btn-secondary {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    .nav-links a { min-height: 44px; }
+    .input-group input,
+    .input-group select,
+    .input-group textarea {
+        min-height: 44px;
+        font-size: 16px; /* evita zoom automático en iOS */
+    }
+    /* Eliminar hover effects en táctil (evita estados "pegados") */
+    .service-item:hover,
+    .doctor-landing-card:hover,
+    .stat-card:hover {
+        transform: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+}
+
+/* ================= MENÚ HAMBURGUESA MÓVIL ================= */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-dark);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+.mobile-menu-toggle:hover { background: var(--bg-color); }
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle { display: block; order: 2; }
+    
+    .landing-nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        flex-direction: column;
+        padding: 15px 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        border-top: 1px solid var(--border-color);
+        z-index: 99;
+        gap: 0;
+    }
+    .landing-nav-links.mobile-open {
+        display: flex;
+        animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .landing-nav-links a {
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 15px;
+        width: 100%;
+    }
+    .landing-nav-links a:last-child { border-bottom: none; }
+    
+    .landing-nav-actions {
+        order: 3;
+        margin-left: auto;
+    }
+}
