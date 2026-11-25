@@ -53,38 +53,97 @@ window.scrollToSteps = function(e) {
 };
 
 window.cargarDatosCuenta = function() {
+    // Llenar formulario
     document.getElementById('cuenta-nombre').value = session.name;
     document.getElementById('cuenta-edad').value = session.age;
     document.getElementById('cuenta-telefono').value = session.phone;
     document.getElementById('cuenta-email').value = session.email;
+
+    // Llenar tarjeta de perfil
+    document.getElementById('perfil-avatar').innerText = session.name.charAt(0).toUpperCase();
+    document.getElementById('perfil-nombre').innerText = session.name;
+    document.getElementById('perfil-email').innerText = session.email;
+    document.getElementById('perfil-telefono').innerText = session.phone;
+    document.getElementById('perfil-edad').innerText = session.age + ' años';
+
+    if (session.date) {
+        document.getElementById('perfil-fecha-registro').innerText =
+            new Date(session.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    // Estadísticas de turnos
+    const misTurnos = DB.turnos.filter(t => t.pacienteId === session.id);
+    document.getElementById('perfil-total-turnos').innerText = misTurnos.length;
+    document.getElementById('perfil-confirmados').innerText = misTurnos.filter(t => t.estado === 'Confirmado').length;
+    document.getElementById('perfil-cancelados').innerText = misTurnos.filter(t => t.estado === 'Cancelado').length;
 };
 
 window.guardarDatosCuenta = function(e) {
     e.preventDefault();
-    const nuevoNombre = document.getElementById('cuenta-nombre').value;
+
+    const nuevoNombre = document.getElementById('cuenta-nombre').value.trim();
     const nuevaEdad = document.getElementById('cuenta-edad').value;
-    const nuevoTelefono = document.getElementById('cuenta-telefono').value;
-    const nuevoEmail = document.getElementById('cuenta-email').value;
+    const nuevoTelefono = document.getElementById('cuenta-telefono').value.trim();
+    const nuevoEmail = document.getElementById('cuenta-email').value.trim();
+    const passActual = document.getElementById('cuenta-pass-actual').value;
+    const passNueva = document.getElementById('cuenta-pass-nueva').value;
 
-    const userIndex = DB.users.findIndex(u => u.id === session.id);
-    if (userIndex !== -1) {
-        DB.users[userIndex].name = nuevoNombre;
-        DB.users[userIndex].age = nuevaEdad;
-        DB.users[userIndex].phone = nuevoTelefono;
-        DB.users[userIndex].email = nuevoEmail;
-        saveDB();
+    // Validar email único
+    const emailDuplicado = DB.users.find(u => u.email === nuevoEmail && u.id !== session.id);
+    if (emailDuplicado) return alert('Ese correo ya está en uso por otra cuenta.');
 
-        session.name = nuevoNombre;
-        session.age = nuevaEdad;
-        session.phone = nuevoTelefono;
-        session.email = nuevoEmail;
-        localStorage.setItem('reuma_session', JSON.stringify(session));
-
-        document.getElementById('user-name-header').innerText = nuevoNombre.split(' ')[0];
-        document.getElementById('user-avatar-initial').innerText = nuevoNombre.charAt(0).toUpperCase();
-        registrarAuditoria('ACTUALIZAR', 'usuario', session.id, `Paciente ${nuevoNombre} actualizó sus datos`);
-        alert('Datos actualizados correctamente.');
+    // Validar cambio de contraseña
+    let cambiarPass = false;
+    if (passActual || passNueva) {
+        if (!passActual || !passNueva) {
+            return alert('Para cambiar la contraseña, completá ambos campos.');
+        }
+        if (passActual !== session.password) {
+            return alert('La contraseña actual es incorrecta.');
+        }
+        if (passNueva.length < 6) {
+            return alert('La nueva contraseña debe tener al menos 6 caracteres.');
+        }
+        cambiarPass = true;
     }
+
+    // Actualizar en DB
+    const userIndex = DB.users.findIndex(u => u.id === session.id);
+    if (userIndex === -1) return;
+
+    DB.users[userIndex].name = nuevoNombre;
+    DB.users[userIndex].age = nuevaEdad;
+    DB.users[userIndex].phone = nuevoTelefono;
+    DB.users[userIndex].email = nuevoEmail;
+    if (cambiarPass) DB.users[userIndex].password = passNueva;
+
+    saveDB();
+
+    // Actualizar sesión
+    session.name = nuevoNombre;
+    session.age = nuevaEdad;
+    session.phone = nuevoTelefono;
+    session.email = nuevoEmail;
+    if (cambiarPass) session.password = passNueva;
+    localStorage.setItem('reuma_session', JSON.stringify(session));
+
+    // Actualizar header
+    document.getElementById('user-name-header').innerText = nuevoNombre.split(' ')[0];
+    document.getElementById('user-avatar-initial').innerText = nuevoNombre.charAt(0).toUpperCase();
+
+    // Registrar auditoría
+    let detalle = `Paciente ${nuevoNombre} actualizó sus datos`;
+    if (cambiarPass) detalle += ' y cambió su contraseña';
+    registrarAuditoria('ACTUALIZAR', 'usuario', session.id, detalle);
+
+    // Recargar tarjeta de perfil
+    cargarDatosCuenta();
+
+    // Limpiar campos de contraseña
+    document.getElementById('cuenta-pass-actual').value = '';
+    document.getElementById('cuenta-pass-nueva').value = '';
+
+    alert('Datos actualizados correctamente.');
 };
 
 window.resetWizard = function() {
@@ -376,11 +435,79 @@ window.closeComprobante = function() {
 };
 
 window.imprimirComprobante = function() {
-    window.print();
+    const comprobante = document.getElementById('seccion-imprimible');
+    if (!comprobante) return alert('No se encontró el comprobante.');
+
+    // Abrir ventana nueva limpia
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) {
+        return alert('El navegador bloqueó la ventana emergente. Permití pop-ups para este sitio e intentá de nuevo.');
+    }
+
+    // Obtener la ruta del styles.css
+    const stylesLink = document.querySelector('link[href="styles.css"]');
+    const stylesHref = stylesLink ? stylesLink.href : 'styles.css';
+
+    // Construir el HTML de la ventana de impresión
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <title>Comprobante de Turno</title>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <link rel="stylesheet" href="${stylesHref}">
+            <style>
+                body {
+                    margin: 0;
+                    padding: 30px;
+                    background: #ffffff;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    color: #333;
+                }
+                .comprobante-container {
+                    max-width: 800px;
+                    margin: 0 auto;
+                    padding: 40px;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 12px;
+                    background: #ffffff;
+                }
+                .comprobante-acciones { display: none !important; }
+                @page { margin: 1cm; size: A4; }
+                @media print {
+                    body { padding: 0; }
+                    .comprobante-container { border: none; padding: 0; }
+                }
+            </style>
+        </head>
+        <body>
+            ${comprobante.outerHTML}
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+
+    // Esperar a que carguen los estilos y luego imprimir
+    printWindow.onload = function() {
+        setTimeout(() => {
+            printWindow.focus();
+            printWindow.print();
+            // Cerrar la ventana después de imprimir (opcional)
+            printWindow.onafterprint = () => printWindow.close();
+        }, 600);
+    };
 };
 
 window.descargarComprobante = function() {
-    // Usar la misma API de impresión pero con "Guardar como PDF"
-    alert('En el diálogo de impresión, seleccioná "Guardar como PDF" como destino para descargar el comprobante.');
-    window.print();
+    const confirmar = confirm(
+        'Para descargar el comprobante como PDF:\n\n' +
+        '1. Se abrirá una nueva ventana con el comprobante\n' +
+        '2. En "Destino" seleccioná "Guardar como PDF"\n' +
+        '3. Hacé clic en "Guardar"\n\n' +
+        '¿Continuar?'
+    );
+    if (!confirmar) return;
+    window.imprimirComprobante();
 };

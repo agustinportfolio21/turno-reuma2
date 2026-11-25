@@ -166,31 +166,126 @@
                 </div>
             </section>
 
-            <section id="section-mi-cuenta" class="hidden" style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+            <section id="section-mi-cuenta" class="hidden" style="max-width: 1100px; margin: 40px auto; padding: 0 20px;">
                 <div class="page-header">
-                    <h1>Mi Cuenta</h1>
-                    <p>Actualizá tus datos personales y de contacto.</p>
+                    <div>
+                        <h1>Mi Cuenta</h1>
+                        <p>Gestioná tu perfil y tus datos de contacto.</p>
+                    </div>
                 </div>
-                <div class="wizard-container" style="padding: 40px;">
-                    <form id="form-mi-cuenta" onsubmit="guardarDatosCuenta(event)">
-                        <div class="input-group">
-                            <label style="font-size: 13px; color: var(--text-light); margin-bottom: 5px; display: block;">Nombre completo</label>
-                            <input type="text" id="cuenta-nombre" required style="padding-left: 15px;">
+            
+                <div class="cuenta-grid">
+                    <!-- COLUMNA IZQUIERDA: TARJETA DE PERFIL -->
+                    <aside class="perfil-card">
+                        <div class="perfil-header">
+                            <div class="perfil-avatar" id="perfil-avatar">U</div>
+                            <h2 id="perfil-nombre">Usuario</h2>
+                            <p class="perfil-email" id="perfil-email">email@ejemplo.com</p>
+                            <span class="perfil-rol"><i class="fa-solid fa-user"></i> Paciente</span>
                         </div>
-                        <div class="input-group">
-                            <label style="font-size: 13px; color: var(--text-light); margin-bottom: 5px; display: block;">Edad</label>
-                            <input type="number" id="cuenta-edad" required style="padding-left: 15px;">
+                    
+                        <div class="perfil-stats">
+                            <div class="perfil-stat">
+                                <h3 id="perfil-total-turnos">0</h3>
+                                <p>Turnos totales</p>
+                            </div>
+                            <div class="perfil-stat">
+                                <h3 id="perfil-confirmados">0</h3>
+                                <p>Confirmados</p>
+                            </div>
+                            <div class="perfil-stat">
+                                <h3 id="perfil-cancelados">0</h3>
+                                <p>Cancelados</p>
+                            </div>
                         </div>
-                        <div class="input-group">
-                            <label style="font-size: 13px; color: var(--text-light); margin-bottom: 5px; display: block;">Teléfono</label>
-                            <input type="tel" id="cuenta-telefono" required style="padding-left: 15px;">
+                    
+                        <div class="perfil-info">
+                            <div class="perfil-info-item">
+                                <i class="fa-solid fa-calendar-plus"></i>
+                                <div>
+                                    <span>Miembro desde</span>
+                                    <strong id="perfil-fecha-registro">-</strong>
+                                </div>
+                            </div>
+                            <div class="perfil-info-item">
+                                <i class="fa-solid fa-phone"></i>
+                                <div>
+                                    <span>Teléfono</span>
+                                    <strong id="perfil-telefono">-</strong>
+                                </div>
+                            </div>
+                            <div class="perfil-info-item">
+                                <i class="fa-solid fa-cake-candles"></i>
+                                <div>
+                                    <span>Edad</span>
+                                    <strong id="perfil-edad">-</strong>
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-group">
-                            <label style="font-size: 13px; color: var(--text-light); margin-bottom: 5px; display: block;">Correo Electrónico</label>
-                            <input type="email" id="cuenta-email" required style="padding-left: 15px;">
+                    
+                        <button class="btn-logout-perfil" onclick="logout()">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar Sesión
+                        </button>
+                    </aside>
+                
+                    <!-- COLUMNA DERECHA: FORMULARIO -->
+                    <div class="cuenta-form-panel">
+                        <div class="cuenta-form-header">
+                            <h3><i class="fa-solid fa-user-pen"></i> Editar datos personales</h3>
+                            <p>Actualizá tu información para mantener tu cuenta al día.</p>
                         </div>
-                        <button type="submit" class="btn-primary" style="margin-top: 10px;">Guardar Cambios</button>
-                    </form>
+                    
+                        <form id="form-mi-cuenta" onsubmit="guardarDatosCuenta(event)" class="cuenta-form">
+                            <div class="cuenta-form-grid">
+                                <div class="input-group">
+                                    <label for="cuenta-nombre"><i class="fa-regular fa-user"></i> Nombre completo</label>
+                                    <input type="text" id="cuenta-nombre" placeholder="Tu nombre completo" required>
+                                </div>
+                            
+                                <div class="input-group">
+                                    <label for="cuenta-edad"><i class="fa-solid fa-cake-candles"></i> Edad</label>
+                                    <input type="number" id="cuenta-edad" placeholder="Tu edad" required min="1" max="120">
+                                </div>
+                            
+                                <div class="input-group">
+                                    <label for="cuenta-telefono"><i class="fa-solid fa-phone"></i> Teléfono</label>
+                                    <input type="tel" id="cuenta-telefono" placeholder="Tu teléfono" required>
+                                </div>
+                            
+                                <div class="input-group">
+                                    <label for="cuenta-email"><i class="fa-regular fa-envelope"></i> Correo Electrónico</label>
+                                    <input type="email" id="cuenta-email" placeholder="Tu correo" required>
+                                </div>
+                            </div>
+                        
+                            <div class="cuenta-form-divider"></div>
+                        
+                            <div class="cuenta-form-header" style="margin-bottom: 20px;">
+                                <h3><i class="fa-solid fa-lock"></i> Seguridad</h3>
+                                <p>Cambiá tu contraseña periódicamente para mayor seguridad.</p>
+                            </div>
+                        
+                            <div class="cuenta-form-grid">
+                                <div class="input-group">
+                                    <label for="cuenta-pass-actual"><i class="fa-solid fa-key"></i> Contraseña actual</label>
+                                    <input type="password" id="cuenta-pass-actual" placeholder="••••••••">
+                                </div>
+                                <div class="input-group">
+                                    <label for="cuenta-pass-nueva"><i class="fa-solid fa-lock"></i> Nueva contraseña</label>
+                                    <input type="password" id="cuenta-pass-nueva" placeholder="Mínimo 6 caracteres" minlength="6">
+                                </div>
+                            </div>
+                        
+                            <div class="cuenta-form-actions">
+                                <button type="button" class="btn-outline" onclick="cargarDatosCuenta()">
+                                    <i class="fa-solid fa-rotate-left"></i> Descartar cambios
+                                </button>
+                                <button type="submit" class="btn-primary" style="width: auto; padding: 12px 30px;">
+                                    <i class="fa-solid fa-floppy-disk"></i> Guardar cambios
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </section>
 

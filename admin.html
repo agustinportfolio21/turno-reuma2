@@ -35,11 +35,19 @@
         </header>
 
         <main class="main-content">
+            <!-- ===== DASHBOARD ===== -->
             <section id="section-dashboard">
                 <div class="page-header">
-                    <h1>Dashboard</h1>
-                    <p>Resumen general del sistema de turnos.</p>
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p>Resumen general del sistema de turnos.</p>
+                    </div>
+                    <div class="date-info">
+                        <p id="dashboard-fecha"></p>
+                    </div>
                 </div>
+            
+                <!-- KPIs PRINCIPALES -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon" style="background: #e3f2fd; color: #1976d2;"><i class="fa-solid fa-calendar-check"></i></div>
@@ -47,31 +55,106 @@
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon" style="background: #fff3cd; color: #856404;"><i class="fa-solid fa-clock"></i></div>
-                        <div class="stat-info"><h3 id="stat-pendientes">0</h3><p>Pendientes</p></div>
+                        <div class="stat-info"><h3 id="stat-pendientes">0</h3><p>Pendientes de confirmar</p></div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon" style="background: #d4edda; color: #155724;"><i class="fa-solid fa-circle-check"></i></div>
                         <div class="stat-info"><h3 id="stat-confirmados">0</h3><p>Confirmados</p></div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon" style="background: #f8d7da; color: #721c24;"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-icon" style="background: #f8d7da; color: #721c24;"><i class="fa-solid fa-ban"></i></div>
+                        <div class="stat-info"><h3 id="stat-cancelados">0</h3><p>Cancelados</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e8eaf6; color: #3949ab;"><i class="fa-solid fa-users"></i></div>
                         <div class="stat-info"><h3 id="stat-pacientes">0</h3><p>Pacientes Registrados</p></div>
                     </div>
-                </div>
-                <div class="dashboard-panel">
-                    <div class="panel-header">
-                        <h3><i class="fa-solid fa-clock-rotate-left"></i> Últimas Solicitudes</h3>
-                        <a href="#" onclick="showSection('turnos', document.querySelectorAll('.nav-links a')[1])" class="panel-link">Ver todas <i class="fa-solid fa-arrow-right"></i></a>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fce4ec; color: #c2185b;"><i class="fa-solid fa-percent"></i></div>
+                        <div class="stat-info"><h3 id="stat-tasa-cancelacion">0%</h3><p>Tasa de Cancelación</p></div>
                     </div>
-                    <div class="table-container" style="margin-top: 0; border: none;">
-                        <table>
-                            <thead><tr><th>Paciente</th><th>Servicio</th><th>Fecha Turno</th><th>Estado</th></tr></thead>
-                            <tbody id="tabla-ultimas-solicitudes"></tbody>
+                </div>
+            
+                <!-- PRÓXIMOS TURNOS (DESTACADO, ARRIBA) -->
+                <div class="proximos-turnos-panel">
+                    <div class="proximos-turnos-header">
+                        <div class="proximos-turnos-titulo">
+                            <div class="proximos-turnos-icono">
+                                <i class="fa-solid fa-calendar-day"></i>
+                            </div>
+                            <div>
+                                <h3>Próximos turnos</h3>
+                                <p>Agenda de hoy y mañana · Atención prioritaria</p>
+                            </div>
+                        </div>
+                        <a href="#" onclick="showSection('turnos', document.querySelectorAll('.nav-links a')[1])" class="proximos-turnos-link">
+                            Ver agenda completa <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="proximos-turnos-body">
+                        <table class="tabla-proximos">
+                            <thead>
+                                <tr>
+                                    <th>Cuándo</th>
+                                    <th>Hora</th>
+                                    <th>Paciente</th>
+                                    <th>Doctor</th>
+                                    <th>Servicio</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-proximos-turnos"></tbody>
                         </table>
                     </div>
                 </div>
+            
+                <!-- GRÁFICO DE TENDENCIA -->
+                <div class="dashboard-panel" style="margin-top: 25px;">
+                    <div class="panel-header">
+                        <h3><i class="fa-solid fa-chart-simple"></i> Actividad de los últimos 7 días</h3>
+                        <span style="font-size: 12px; color: var(--text-light);">Solicitudes por día</span>
+                    </div>
+                    <div style="padding: 25px;">
+                        <div id="grafico-tendencia" style="display: flex; align-items: flex-end; gap: 12px; height: 160px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"></div>
+                    </div>
+                </div>
+            
+                <!-- DISTRIBUCIÓN POR DOCTOR + ÚLTIMAS SOLICITUDES -->
+                <div class="dashboard-two-col">
+                    <div class="dashboard-panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-user-doctor"></i> Turnos por especialista</h3>
+                        </div>
+                        <div style="padding: 25px;">
+                            <div id="distribucion-doctores"></div>
+                        </div>
+                    </div>
+                
+                    <div class="dashboard-panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-clock-rotate-left"></i> Últimas solicitudes</h3>
+                            <a href="#" onclick="showSection('turnos', document.querySelectorAll('.nav-links a')[1])" class="panel-link">Ver todas <i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                        <div class="table-container" style="margin-top: 0; border: none;">
+                            <table>
+                                <thead><tr><th>Paciente</th><th>Servicio</th><th>Fecha Turno</th><th>Estado</th></tr></thead>
+                                <tbody id="tabla-ultimas-solicitudes"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- ÚLTIMAS ACCIONES DE AUDITORÍA -->
+                <div class="dashboard-panel" style="margin-top: 25px;">
+                    <div class="panel-header">
+                        <h3><i class="fa-solid fa-clipboard-list"></i> Últimas acciones</h3>
+                        <a href="#" onclick="showSection('auditoria', document.querySelectorAll('.nav-links a')[3])" class="panel-link">Ver auditoría <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div style="padding: 15px 25px;" id="ultimas-acciones-auditoria"></div>
+                </div>
             </section>
 
+            <!-- ===== GESTIÓN DE TURNOS ===== -->
             <section id="section-turnos" class="hidden">
                 <div class="page-header">
                     <h1>Gestión de Turnos</h1>
@@ -112,6 +195,7 @@
                 </div>
             </section>
 
+            <!-- ===== PACIENTES ===== -->
             <section id="section-pacientes" class="hidden">
                 <div class="page-header">
                     <h1>Base de Pacientes</h1>
@@ -136,6 +220,7 @@
                 </div>
             </section>
 
+            <!-- ===== AUDITORÍA ===== -->
             <section id="section-auditoria" class="hidden">
                 <div class="page-header">
                     <h1>Registro de Auditoría</h1>
@@ -168,6 +253,7 @@
         </main>
     </div>
 
+    <!-- MODAL GESTIÓN DE TURNO -->
     <div id="modal-turno" class="modal hidden">
         <div class="modal-content" style="max-width: 600px;">
             <h3><i class="fa-solid fa-calendar-check" style="color: var(--primary-blue); margin-right: 8px;"></i> Gestionar Turno</h3>
