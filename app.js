@@ -53,25 +53,53 @@ window.handleLogin = function(e) {
 
 window.handleRegister = function(e) {
     e.preventDefault();
-    const email = document.getElementById('reg-email').value;
-    if (DB.users.find(u => u.email === email)) return alert('Este correo ya está registrado.');
+    
+    const name = document.getElementById('reg-name').value.trim();
+    const age = document.getElementById('reg-age').value;
+    const phone = document.getElementById('reg-phone').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const passwordConfirm = document.getElementById('reg-password-confirm').value;
+
+    // Validaciones
+    if (password !== passwordConfirm) {
+        return alert('Las contraseñas no coinciden. Por favor, verificá.');
+    }
+    if (password.length < 6) {
+        return alert('La contraseña debe tener al menos 6 caracteres.');
+    }
+    if (DB.users.find(u => u.email === email && u.activo !== false)) {
+        return alert('Este correo ya está registrado.');
+    }
 
     const newUser = {
         id: 'u_' + Date.now(),
-        name: document.getElementById('reg-name').value,
-        age: document.getElementById('reg-age').value,
-        phone: document.getElementById('reg-phone').value,
+        name: name,
+        age: age,
+        phone: phone,
         email: email,
-        password: document.getElementById('reg-password').value,
+        password: password,
         role: 'paciente',
         activo: true,
         date: new Date().toISOString()
     };
+    
     DB.users.push(newUser);
     saveDB();
     registrarAuditoria('CREAR', 'usuario', newUser.id, `Nuevo paciente registrado: ${newUser.name}`);
+    
     alert('¡Registro exitoso! Ahora iniciá sesión con tus credenciales.');
     window.switchAuthTab('login');
+    
+    // Auto-completar email
+    document.getElementById('login-email').value = email;
+    document.getElementById('login-password').focus();
+    
+    // Limpiar formulario
+    document.getElementById('form-register').reset();
+    document.getElementById('password-strength').classList.add('hidden');
+    document.getElementById('password-match-msg').classList.add('hidden');
+    document.getElementById('btn-register-submit').disabled = true;
 };
 
 window.fillAdminCredentials = function() {
